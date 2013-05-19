@@ -11,14 +11,41 @@ a:hover {
     text-decoration: underline;
 }
 
-div.bordered {
+div.centered {
     margin: 0 auto;
     width: 600px;
     padding: 20px;
     text-align: center;
     border: 1px solid #ddd;
     -webkit-border-radius: 20px;
+    float: left;
 }
+
+#game {
+    height: 480px;
+    position: relative;
+}
+
+
+#ask span.join {
+    padding: 10px;
+    background-color: #ddd;
+    -webkit-border-radius: 10px;
+}
+
+
+div.bordered {
+    margin: 0 auto;
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 20px;
+    margin-right: 100px;
+    float:right;
+}
+
+
 
 #error {
     background-color: #BA0000;
@@ -49,13 +76,13 @@ div.bordered {
 
 #channel div#descr {
     position: absolute;
-    left: -10px;
+    left: -290px;
     top: -190px;
     font-size: 13px;
     text-align: left;
     line-height: 20px;
     padding: 5px;
-    width: 630px;
+    width: 330px;
 }
 
 div#msgs {
@@ -104,7 +131,7 @@ div#input {
 }
 
 div#input #message {
-    width: 600px;
+    width: 300px;
     border: 5px solid #bbb;
     -webkit-border-radius: 3px;
     font-size: 30pt;

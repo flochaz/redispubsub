@@ -6,7 +6,6 @@
 </head>
 <body>
 <b>Server: </b><%= server %>
-<br/>
 <% if(user) { %>
 <b>User: </b> <label id="user"><%= user %></label> <a href="/logout" style='color:blue;text-decoration: underline'> Log out</a>
 <% } %>
@@ -15,6 +14,16 @@
 <div id="ask" class="bordered" style="display: none;">
     Name: <input type="text" id="name"/> <a href="#"><span class="join">Join!</span></a>
 </div>
+<div id="game" class="centered" style="display: none;">
+    <h4>Random Game: <%= gameKey %></h4>
+    <span id="alredayplayed">Your current score is :</span>   <span id="score">10</span> <br/>
+        
+    <button id="play">PLAY ! <br/>(generate random number betwwen O and 100)</button>
+    <div id="buttonPostScore">
+        <form><button  id="postScore"/>Post score</form>
+    </div>
+</div>    
+
 <div id="channel" class="bordered" style="display: none;">
 
     <div id="msgs">

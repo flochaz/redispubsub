@@ -2,6 +2,9 @@ $(document).ready(function () {
     //Check if the user is rejoining
     //ps: This value is set by Express if browser session is still valid
     var user = $('#user').text();
+    var user_id = null;
+    var gameKey = 'sMeQMYVh1jSJZZ62l2';
+
     // show join box
     if (user === "") {
         $('#ask').show();
@@ -18,9 +21,9 @@ $(document).ready(function () {
     });
 
     /*
-     When the user joins, hide the join-field, display chat-widget and also call 'join' function that
-     initializes Socket.io and the entire app.
-     */
+When the user joins, hide the join-field, display chat-widget and also call 'join' function that
+initializes Socket.io and the entire app.
+*/
     $('#ask a').click(function () {
         join($('#ask input').val());
     });
@@ -28,10 +31,13 @@ $(document).ready(function () {
     function join(name) {
         $('#ask').hide();
         $('#channel').show();
-        $('input#message').focus();
+        $('#game').show();
+        $('#alreadyplayed').hide();
         /*
-         Connect to socket.io on the server.
-         */
+Connect to socket.io on the server.
+*/
+
+        
         var host = window.location.host.split(':')[0];
         var socket = io.connect('http://' + host, {reconnect:false, 'try multiple transports':false});
         var intervalID;
@@ -81,12 +87,26 @@ $(document).ready(function () {
         };
 
         /*
-         When the user Logs in, send a HTTP POST to server w/ user name.
-         */
+When the user Logs in, send a HTTP POST to server w/ user name.
+*/
         $.post('/user', {"user":name})
             .success(function () {
                 // send join message
                 socket.emit('join', JSON.stringify({}));
+                $.post("http://openkit-server.cloudfoundry.com/users", 
+         {
+             "api":  gameKey,  
+             "app_key": gameKey, 
+             "user": { 
+                 "nick": name
+                 }
+             },
+             null,
+             "json"
+         ).done(function(data) {
+             user_id = data.id;
+             alert("User Id: " + user_id);
+});
             }).error(function () {
                 console.log("error");
             });
@@ -94,8 +114,8 @@ $(document).ready(function () {
         var container = $('div#msgs');
 
         /*
-         When a message comes from the server, format, colorize it etc. and display in the chat widget
-         */
+When a message comes from the server, format, colorize it etc. and display in the chat widget
+*/
         socket.on('chat', function (msg) {
             var message = JSON.parse(msg);
 
@@ -142,8 +162,8 @@ $(document).ready(function () {
         });
 
         /*
-         When the user creates a new chat message, send it to server via socket.emit w/ 'chat' event/channel name
-         */
+When the user creates a new chat message, send it to server via socket.emit w/ 'chat' event/channel name
+*/
         $('#channel form').submit(function (event) {
             event.preventDefault();
             var input = $(this).find(':input');
@@ -151,6 +171,34 @@ $(document).ready(function () {
             socket.emit('chat', JSON.stringify({action:'message', msg:msg}));
             input.val('');
         });
+        
+        
+        
+        $('button#play').click(function() {
+            var score = Math.floor((Math.random()*100)+1);
+                $('#alreadyplayed').show();
+                $('#score').html(score);
+        })
+        $('#game form').submit(function (event) {
+            event.preventDefault();
+            var input = $(this).find(':input');
+            var score = $('#score').text();
+            var msg = input.val() + 'I post the score ' + score ;
+            var gameKey = 'sMeQMYVh1jSJZZ62l2';
 
+            socket.emit('chat', JSON.stringify({action:'message', msg:msg}));
+            input.val('');
+            $.post("http://openkit-server.cloudfoundry.com/scores", 
+                { "app_key": gameKey,
+                score: { 
+                    "leaderboard_id": 1, 
+                    user_id: user_id, 
+                    value: score, 
+                    display_string: score + " random score"}
+         },
+         null,
+         "json"
+     )
+        });
     }
 });

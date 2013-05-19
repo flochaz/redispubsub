@@ -9,6 +9,6 @@ exports.index = function (req, res) {
     //regenerate new session & store user from previous session (if it exists)
     req.session.regenerate(function (err) {
         req.session.user = user;
-        res.render('index', { title:'Express', server:serverName, user:req.session.user});
+        res.render('index', { title:'Express', server:serverName, user:req.session.user, gameKey:'sMeQMYVh1jSJZZ62l2'});
     });
 };
