@@ -1,4 +1,51 @@
 
+# Introduction
+
+This app is a mix of the sample  web based game woriking with openkit-server (https://raw.github.com/flochaz/SampleOpenkitWebClient) and the multi-users chat sample build by Raja Rao used to demonstrate how to scale real-time apps.
+
+# Openkit-server leaderboard service vs. Web based game
+
+This application is a basic Javascript (jquery) sample of Openkit-server (openkit.io) web client.
+
+
+## Register user
+
+JQuery call to register a user.
+
+<pre>
+
+                $.post("http://openkit-server.cloudfoundry.com/users", 
+         {
+             "api":  gameKey,  
+             "app_key": gameKey, 
+             "user": { 
+                 "nick": name
+                 }
+             },
+             null,
+             "json"
+         )
+</pre>
+
+**PS:** Here we can see that the current openkit-server implementation is a bit strange, api and app_key is the same and both need to be declare in order to pass the filters. A pull request will be done to modify it.
+
+## Post score
+
+JQuery call to add a score a a leaderboard
+
+<pre>
+            $.post("http://openkit-server.cloudfoundry.com/scores", 
+                { "app_key": gameKey,
+                score: { 
+                    "leaderboard_id": 1, 
+                    user_id: user_id, 
+                    value: score, 
+                    display_string: score + " random score"}
+         },
+         null,
+         "json"
+     )
+</pre>
 
 # Scaling real-time apps on Cloud Foundry (using Redis)
 
